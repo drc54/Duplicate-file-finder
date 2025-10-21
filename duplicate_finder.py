@@ -19,8 +19,8 @@ def get_file_hash(filepath):
             for chunk in iter(lambda: f.read(4096), b''):
                 hasher.update(chunk)
         return hasher.hexdigest()
-    except (IOError, OSError) as e:
-        print(f"Error reading file {filepath}: {e}")
+    except (IOError, OSError, PermissionError) as e:
+        # Silently skip files that can't be read (common with cache files)
         return None
 
 
@@ -42,6 +42,7 @@ def find_duplicates(root_dir="."):
     # Key: (file_size, file_hash), Value: list of file paths
     files_by_size = defaultdict(list)
     files_by_hash = defaultdict(list)
+    skipped_files = []
     
     print("Scanning files...\n")
     print("-" * 80)
@@ -62,11 +63,18 @@ def find_duplicates(root_dir="."):
                 # Group by size first (optimization)
                 files_by_size[file_size].append(filepath)
                 
-            except (OSError, IOError) as e:
-                print(f"Error accessing {filepath}: {e}\n")
+            except (OSError, IOError, PermissionError) as e:
+                # Track skipped files without cluttering output
+                skipped_files.append((filepath, str(e)))
                 continue
     
     print("-" * 80)
+    
+    # Report skipped files if any
+    if skipped_files:
+        print(f"\nSkipped {len(skipped_files)} file(s) due to access errors (e.g., cache files, permission issues)")
+        print("Run with elevated permissions if you need to scan all files.\n")
+    
     print("\nCalculating file hashes for potential duplicates...\n")
     
     # Second pass: only hash files that have the same size
