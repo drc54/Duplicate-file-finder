@@ -1,0 +1,15 @@
+# Test files directory
+test_files/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Generated reports
+duplicate_files_report.txt
+
+# Virtual environment
+venv/
+ENV/
+env/
