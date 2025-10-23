@@ -49,6 +49,9 @@ def find_duplicates(root_dir="."):
     
     # First pass: group files by size (faster than hashing everything)
     for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Skip the to_be_deleted directory
+        dirnames[:] = [d for d in dirnames if d != 'to_be_deleted']
+        
         for filename in filenames:
             filepath = os.path.join(dirpath, filename)
             try:
