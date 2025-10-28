@@ -1,2 +1,2 @@
 # Duplicate-file-finder
-Directory tree search for duplicate files 
+Search for duplicate files anywhere within the current directory tree.  To aid in removal of duplicates, though this app does not facilitate deleting of files, it does allow for the moving of duplicates to a to_be_deleted directory which can be manipulated outside this app.  Output to file includes: (1) duplicates found in each directory, (2) a summary of the number of duplicate types, duplicates and number that could be deleted before any clean-up actions, (3) a listing of each directory along with the number of files and number of duplicates <directories with only duplicates being highlighted> (4) after any file movement, written to file are the number of moved and remaining duplicates.
